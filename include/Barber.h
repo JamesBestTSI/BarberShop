@@ -15,6 +15,7 @@ class Barber{
         ~Barber();
         int GetID();
         void GiveCustomer(std::shared_ptr<Customer> &currentCustomer);
+        void RemoveCustomer();
         std::shared_ptr<Customer> GetCustomer();
         void CutCustomerHair();
 };

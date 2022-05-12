@@ -34,6 +34,7 @@ void Shop::Run(){
 
 void Shop::DisplayQue(){
     std::unique_lock<std::mutex> LockCustomerList(customerListMutex);
+    system("cls");
     std::cout << "\n############## CURRENT QUE INFO ##############" << std::endl;
     for (std::list<std::shared_ptr<Barber>>::iterator barb = Barbers.begin(); barb != Barbers.end(); ++barb)
     {
@@ -44,6 +45,7 @@ void Shop::DisplayQue(){
             std::cout << "Barber " << (*barb)->GetID() << " is not cutting hair" << std::endl;
         }
     }
+    std::cout << std::endl;
     int quePos = 1;
     for (std::list<std::shared_ptr<Customer>>::iterator cust = Customers.begin(); cust != Customers.end(); ++cust)
     {
@@ -103,11 +105,14 @@ void Shop::StartBarber(std::shared_ptr<Barber> &barber){
         barber->GetCustomer()->SetHairBeingCut(true);
         // Remove that customer from the list
         Customers.erase(Customers.begin());
+        if (Customers.size() == 0){
+            customerWaiting = false;
+        }
         std::cout << "Barber " << barber->GetID() << " is working on Customer " << barber->GetCustomer()->GetID() <<  std::endl;
         // Unlock the list
         LockCustomerList.unlock();
-        // Work on that customer for 2-15
-        std::this_thread::sleep_for(std::chrono::seconds((rand()%10)+3));
+        // Work on that customer for 5-15
+        std::this_thread::sleep_for(std::chrono::seconds((rand()%10)+6));
         barber->CutCustomerHair();
 
         LockCustomerList.lock();
@@ -115,6 +120,7 @@ void Shop::StartBarber(std::shared_ptr<Barber> &barber){
             customerWaiting = false;
         }
         std::cout << "Barber " << barber->GetID() << " finished working on Customer " << barber->GetCustomer()->GetID() << std::endl;
+        barber->RemoveCustomer();
         LockCustomerList.unlock();
     }
 };

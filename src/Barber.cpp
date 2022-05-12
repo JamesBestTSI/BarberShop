@@ -13,6 +13,7 @@ void Barber::GiveCustomer(std::shared_ptr<Customer> &currentCustomer)
 {
     barbersCustomer = std::move(currentCustomer);
 };
+void Barber::RemoveCustomer() { barbersCustomer = nullptr; };
 
 std::shared_ptr<Customer> Barber::GetCustomer() { return barbersCustomer; };
 
