@@ -1,6 +1,8 @@
 #include <iostream>
-#include <string>
+#include "../include/Shop.h"
 
 int main(){
+    Shop TheBarberShop;
+    TheBarberShop.Run();
     return 0;
 }
